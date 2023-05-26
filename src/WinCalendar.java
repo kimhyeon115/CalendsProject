@@ -11,9 +11,13 @@ import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JTextField;
+
+import member.DateUtil;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -233,7 +237,13 @@ public class WinCalendar extends JDialog {
 		if(month==2 && (year%4==0 && year%100!=0 || year%400==0))
 			last++;
 		for(int i=1; i<=last; i++) {
-			JButton btn = new JButton(i+"");
+			
+			String sSlrDate = "" + year + (month<10? "0":"") + month + (i<10? "0":"") + i;
+			HashMap hm = DateUtil.toLunar(sSlrDate);
+			String retLrrDate = hm.get("day").toString();
+			retLrrDate = Integer.parseInt(retLrrDate.substring(4,6)) + "." + Integer.parseInt(sSlrDate.substring(6));
+			
+			JButton btn = new JButton(i+" ("+retLrrDate+")");
 			btn.addActionListener(new ActionListener() {
 				
 				@Override
@@ -248,7 +258,7 @@ public class WinCalendar extends JDialog {
 			panelCalender.add(btn);
 			panelCalender.revalidate();
 		btn.setForeground(new Color(0,0,255));
-		}	
+		}
 	}
 }
 
